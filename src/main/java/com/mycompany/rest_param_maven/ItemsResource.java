@@ -17,7 +17,7 @@ import javax.ws.rs.Path;
  *
  * @author paulf
  */
-@Path("/anagram")
+@Path("/")
 public class ItemsResource {
 
     @Context
