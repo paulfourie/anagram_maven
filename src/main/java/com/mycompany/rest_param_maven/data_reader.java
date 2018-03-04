@@ -30,31 +30,23 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonArray ;
 import javax.json.JsonArrayBuilder ;
 
-
+// get the wordlist file
 public class data_reader {
-    
     
     
     String   p_wordlist_data ;
     String   p_answer = "" ;
-    
-   
         
     
     public void read_data(){
         
-       
-        
+         
         String    l_url_string  = "http://static.abscond.org/wordlist.txt" ;        
         String    l_url_query   = "" ;        
-               
-        
         String    l_user_agent  = "Mozilla/5.0" ;
         int       l_responseCode ;
         String    l_inputLine;
-        
         String    l_wordlist_data = null ;
-        
         
         
         try 
@@ -71,8 +63,6 @@ public class data_reader {
             
             l_responseCode = con_obj.getResponseCode();
  
-            
-            
             BufferedReader inBuffer = new BufferedReader( new InputStreamReader( con_obj.getInputStream() ) );
             
             StringBuffer http_response = new StringBuffer();
@@ -89,8 +79,7 @@ public class data_reader {
             l_wordlist_data = http_response.toString() ;
             
  //           System.out.println( l_wordlist_data ) ;
-            
-            
+         
             
         }
         catch ( ConnectException  e )
@@ -125,7 +114,7 @@ public class data_reader {
     }    
     
 
-  
+    // parse the worlist and generate JSON answer
     public void build_json( String S_query ){
             
 
@@ -138,6 +127,7 @@ public class data_reader {
             
         
         // split the potential multiple queries 
+        // and build answer for each comma separated query
         for ( String S_query_split : S_query.split( "," ) ) {
             
                        
@@ -148,11 +138,9 @@ public class data_reader {
             s_sorted_query = new String(c_sort_query).toLowerCase().trim() ;
 
             System.out.println( "query " + s_sorted_query ) ;
-
-            
+     
             // create an array for multiple answers
-            JsonArrayBuilder anagram_Array = Json.createArrayBuilder();
-            
+            JsonArrayBuilder anagram_Array = Json.createArrayBuilder(); 
             
             // find the anagrams for the query(s) in the wordlist
             // and build array
@@ -164,35 +152,27 @@ public class data_reader {
                 Arrays.sort( c_anagram ) ;
 
                 s_sorted_data = new String( c_anagram ).toLowerCase().trim() ;
-                
-                
+            
                 // found anagram
                 if ( s_sorted_query.equals(s_sorted_data) ) {
 
                     System.out.println( s_sorted_query + "=" + anagram_word ) ;
 
                     anagram_Array.add( anagram_word ) ;
-                    
 
                 } 
 
             }
-            
-            
+
             // assign the array to the answer
             output_jsonObjectBuilder.add( s_sorted_query , anagram_Array ) ;       
-                       
-            
-        }
         
+        }
 
         // pass back the whole json as a string
         p_answer = output_jsonObjectBuilder.build().toString() ;
 
-
     }
-    
-    
 
     
 }

@@ -45,21 +45,12 @@ public class ItemResource {
     @Produces("application/json")
     public String getJson() {
 
-
-              
-        data_reader l_reader = new data_reader() ;
-        
+        data_reader l_reader = new data_reader() ;    
         l_reader.read_data();   
-        
         l_reader.build_json( this.anagram );
-        
-        
-        System.out.println( l_reader.p_answer ) ;
-         
+//        System.out.println( l_reader.p_answer ) ;
         return l_reader.p_answer  ;
-      
-        
-        
+         
     }
 
     /**
